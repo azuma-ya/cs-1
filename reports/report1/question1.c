@@ -1,5 +1,4 @@
 #include <stdio.h>
-#define N 10000
 
 //一つの関数で再帰させる
 // int func(int x, int y) {
@@ -27,19 +26,19 @@ int func1(int n){
   else return (func1(n - 2) + func0(n - 1))/2;
 }
 
-int main(void) {
-  // for (int i = 1; i < N; i++){
-  //   if(func(i, 0) + func(i, 1) == func(i + 1, 0) + func(i + 1, 1)){
-  //     printf("w[%d]=%d\n", i, func(i, 0) + func(i, 1));
-  //     return 0;
-  //   }
-  // }
-
-  for (int i = 1; i < N; i++){
-    if(func0(i) + func1(i) == func0(i + 1) + func1(i + 1)){
-      printf("w[%d]=%d\n", i, func0(i) + func1(i));
-      break;
-    }
+int myFunc(int n) {
+  if(func0(n) + func1(n) == func0(n + 1) + func1(n + 1)){
+     printf("w[%d]=%d\n", n, func0(n) + func1(n));
+     return 0;
   }
+  return 1;
+}
+
+int loop(int start, int end, int (*func)(int)){
+  if(start < end && func(start))loop(start + 1, end, func);
+}
+
+int main(void) {
+  loop(1, 20, myFunc);
   return 0;
 };
