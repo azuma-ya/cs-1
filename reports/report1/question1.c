@@ -39,6 +39,6 @@ int loop(int start, int end, int (*func)(int)){
 }
 
 int main(void) {
-  loop(1, 20, myFunc);
+  loop(1, 1000, myFunc);
   return 0;
 };
