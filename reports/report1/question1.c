@@ -26,6 +26,7 @@ int func1(int n){
   else return (func1(n - 2) + func0(n - 1))/2;
 }
 
+//w[i]を求める条件文
 int myFunc(int n) {
   if(func0(n) + func1(n) == func0(n + 1) + func1(n + 1)){
      printf("w[%d]=%d\n", n, func0(n) + func1(n));
@@ -34,6 +35,8 @@ int myFunc(int n) {
   return 1;
 }
 
+//forループによる変数宣言を避けるために再帰関数を用いた
+//第三引数に関数をとらずに実装してもよいが、汎用性のため高階関数として実装
 int loop(int start, int end, int (*func)(int)){
   if(start < end && func(start))loop(start + 1, end, func);
 }
