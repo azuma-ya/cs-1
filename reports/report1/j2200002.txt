@@ -1,0 +1,106 @@
+1.  #include <stdio.h>
+
+    int func1(int);
+    int func0(int n){
+      if(n == 0)return 111;
+      else if(n == 1)return 999;
+      else return (func0(n - 2) + func1(n - 1))/2;
+    }
+
+    int func1(int n){
+      if(n == 0)return 222;
+      else if(n == 1)return 888;
+      else return (func1(n - 2) + func0(n - 1))/2;
+    }
+
+    int myFunc(int n) {
+      if(func0(n) + func1(n) == func0(n + 1) + func1(n + 1)){
+        printf("w[%d]=%d\n", n, func0(n) + func1(n));
+        return 0;
+      }
+      return 1;
+    }
+
+    //forループによる変数宣言を避けるために再帰関数を用いた
+    int loop(int start, int end){
+      if(start < end && MyFunc(start))loop(start + 1, end);
+    }
+
+    int main(void) {
+      loop(1, 1000);
+      return 0;
+    };
+
+2.  選んだ錬成問題：第8章 59~63 
+      キーボードから整数値を読み込んで、0、1、2であれば、それぞれ『赤』『緑』『青』と表示するプログラム
+
+    考えた応用問題：
+      キーボードから整数値を読み込んで、0、1、2であれば、それぞれ『Rock』『Scissors』『Paper』として、コンピュータとじゃんけんするプログラム
+
+    工夫した点：
+      ・勝敗をif文を使わずに有効グラフで考え二次元配列で表現したこと
+      ・整数値を読み込む際、適正な値でない場合、再度数値を読み込むようにしたこと
+      ・あいこの際の処理をwhileを使わずに再帰で簡潔に書いたこと
+
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <time.h>
+    #include <unistd.h>
+
+    enum judge {draw, win, lose};
+
+    char HANDS[3][10] = {"rock", "scissors", "paper"};
+    int RULE[3][3] = {{0, 1, 2}, {2, 0, 1}, {1, 2, 0}};
+
+    void scan_within(char q_msg[], char e_msg[], int min, int max, int *n){
+      do{
+        printf("%s", q_msg);
+        scanf("%d", n);
+        if((*n < min) || (*n > max)){
+          printf("%s\n\n", e_msg);
+        }
+      }while((*n < min) || (*n > max));
+    }
+
+    void init(int *player_hand, int *pc_hand){
+      srand(time(NULL));
+      char q_msg[] = "What your hand? Rock..0, Scissors..1, Paper..2 : ";
+      char e_msg[] = "Input correct number!";
+      scan_within(q_msg, e_msg, 0, 2, player_hand);
+      *pc_hand = rand() % 3;
+    }
+
+    void game_log(char player_hand[], char pc_hand[]){
+      sleep(1);
+      puts("Rock, paper, scissors, one two three!\n");
+      sleep(1);
+      printf("Me...%s vs Pc...%s\n", player_hand, pc_hand);
+      sleep(2);
+    }
+
+    void game(){
+      int player_hand;
+      int pc_hand;
+      init(&player_hand, &pc_hand);
+
+      game_log(HANDS[player_hand], HANDS[pc_hand]);
+
+      enum judge result = RULE[player_hand][pc_hand];
+
+      switch(result){
+        case win:
+          printf("You win!!!\n");
+          break;
+        case lose:
+          printf("You lose...\n");
+          break;
+        case draw:
+          printf("One Twe Three!\n");
+          game();
+      }
+    }
+
+    int main(void){
+      game();
+      return 0;
+    }
